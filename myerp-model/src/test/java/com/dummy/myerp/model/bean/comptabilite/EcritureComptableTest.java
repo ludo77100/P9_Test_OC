@@ -66,6 +66,7 @@ public class EcritureComptableTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "301"));
         vEcriture.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
 
+        //On utilise setScale car la précision est de deux chiffres après la virgule
         Assert.assertEquals(vEcriture.getTotalDebit(), BigDecimal.valueOf(200.50+100.50+40).setScale(2));
     }
 
