@@ -1,6 +1,7 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
@@ -134,6 +135,23 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+
+        //On récupère la référence qu'on souhaite vérifier
+        String refEcritureComptable = pEcritureComptable.getReference();
+
+        //Une référence est composé comme suit: XX-AAAA/##### ou XX = journal de banque, AAAA = année et ##### = numéro de séquence (unique à chaque journal donc termine par son id de ligne)
+        //Donc on récupère chaque valeur pour ensuite la comparé à la référence
+        //Le but ici est que la méthode construise sa propre référence afin de la comparer à celle en persistance
+
+        String journal = pEcritureComptable.getJournal().getCode();
+        Integer annee = pEcritureComptable.getDate().getYear();
+        String reference = pEcritureComptable.getId().toString();
+
+        String refComposition = journal + "-" + annee.toString();
+
+        if (!refEcritureComptable.contains(refComposition) && refEcritureComptable.endsWith(reference));
+        throw new FunctionalException(
+                "Le formatage de la référence de l'écriture comptable n'est pas au format XX-AAAA/#####.");
     }
 
 
